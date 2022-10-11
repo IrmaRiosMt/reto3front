@@ -1,43 +1,45 @@
 const API_URL = "http://localhost:8081/api/";
 
-function getAllCategories() {
+function getAllClients() {
   //elemento del DOM->document object model
   $.ajax({
-    url: `${API_URL}Category/all`,
+    url: `${API_URL}Client/all`,
     type: "GET",
     datatype: "JSON",
-    success: renderCategory,
+    success: renderClient,
   });
 }
 
-function renderCategory(response) {
+function renderClient(response) {
   const $responseContainer = document.getElementById("response");
   $responseContainer.innerHTML = "";
   for (let x = 0; x < response.length; x++) {
     const row = response[x];
-    $responseContainer.innerHTML += `
-    <tr>
-        <td>
-            ${row.id}
-        </td>
-        <td>
-            ${row.name}
-        </td>
-        <td>
-            ${row.description}
-        </td>        
-        <td>
-            <button onclick="renderCategoryToUpdate(${row.id},'${row.name}','${row.description}')">Actualizar</button>
-        </td>
-        <td>
-            <button onclick="deleteCategory(${row.id})">Eliminar</button>
-        </td>
-    </tr>
-        `;
+    $responseContainer.innerHTML += renderCard(
+      row.name,
+      row.email,
+      row.age,
+      row.idClient
+    );
   }
 }
 
-function createCategory() {
+function renderCard(name, email, age, id) {
+  return `
+  <div class="card">
+      <h1>${name}</h1>
+      <p class="price">${age}</p>
+      <input type="text" value />
+      <p>
+      ${email}
+      </p>
+      <p><button onclick="renderClientToUpdate()">Actualizar</button></p>
+      <p><button>Borrar</button></p>
+    </div>
+  `;
+}
+
+function createClient() {
   let dataToSend = {
     name: $("#name").val(), //obtengo el valor que tiene el campo de texto id="name"
     description: $("#description").val(),
@@ -45,7 +47,7 @@ function createCategory() {
   dataToSend = JSON.stringify(dataToSend);
 
   const settings = {
-    url: `${API_URL}Category/save`,
+    url: `${API_URL}Client/save`,
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -54,14 +56,14 @@ function createCategory() {
   };
 
   $.ajax(settings).done(function (response) {
-    alert("Category registrada correctamente");
+    alert("Client registrada correctamente");
     $("#name").val(""); //limpio el valor que tenga el campo de texto
     $("#description").val("");
     getAllCategories();
   });
 }
 
-function updateCategory() {
+function updateClient() {
   let dataToSend = {
     name: $("#name").val(),
     description: $("#description").val(),
@@ -70,7 +72,7 @@ function updateCategory() {
   dataToSend = JSON.stringify(dataToSend);
 
   const settings = {
-    url: `${API_URL}Category/update`,
+    url: `${API_URL}Client/update`,
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -79,7 +81,7 @@ function updateCategory() {
   };
 
   $.ajax(settings).done(function (response) {
-    alert("Category actualizada correctamente");
+    alert("Client actualizada correctamente");
     $("#id").val("");
     $("#name").val("");
     $("#description").val("");
@@ -87,16 +89,16 @@ function updateCategory() {
   });
 }
 
-function renderCategoryToUpdate(id, name, description) {
+function renderClientToUpdate(id, name, description) {
   $("#id").val(id); //seteo el valor que tendrá el campo de texto
   $("#name").val(name);
   $("#description").val(description);
   //$(".test").val(description);
 }
 
-function deleteCategory(id) {
+function deleteClient(id) {
   const settings = {
-    url: `${API_URL}Category/${id}`,
+    url: `${API_URL}Client/${id}`,
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
@@ -106,8 +108,8 @@ function deleteCategory(id) {
 
   $.ajax(settings)
     .done(function (response) {
-      alert("Category eliminado correctamente");
-      getAllCategories();
+      alert("Client eliminado correctamente");
+      getAllClients();
     })
     .fail(function (response) {
       console.log(response.responseText);
@@ -115,8 +117,4 @@ function deleteCategory(id) {
     });
 }
 
-function addClass(){
-  $(".testi").addClass("mensaje")
-}
-
-getAllCategories();
+getAllClients();

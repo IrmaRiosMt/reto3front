@@ -12,6 +12,7 @@ function getQuadbike() {
 
 function renderQuadbike(response) {
   const $responseContainer = document.getElementById("response");
+  $responseContainer.innerHTML='';
   for (let x = 0; x < response.length; x++) {
     const row = response[x];
     $responseContainer.innerHTML += `
@@ -31,6 +32,12 @@ function renderQuadbike(response) {
         <td>
             ${row.year}
         </td>
+        <td>
+            <button onclick="renderQuadbikeToUpdate(${row.id},'${row.name}','${row.description}','${row.brand}',${row.year},${row.category.id})">Actualizar</button>
+        </td>
+        <td>
+            <button onclick="deleteQuadbike(${row.id})">Eliminar</button>
+        </td>
     </tr>
         `;
   }
@@ -43,7 +50,7 @@ function createQuadbike() {
     brand: $("#brand").val(),
     year: parseInt($("#year").val()),
     category: {
-      id:parseInt($("#category").val())
+      id: parseInt($("#category").val()),
     },
   };
   dataToSend = JSON.stringify(dataToSend);
@@ -59,27 +66,26 @@ function createQuadbike() {
 
   $.ajax(settings).done(function (response) {
     alert("Quadbike registrada correctamente");
-    $("#name").val("")
-    $("#description").val("")
-    $("#brand").val("")
-    $("#year").val("")
-    $("#category").val("")
+    $("#name").val("");
+    $("#description").val("");
+    $("#brand").val("");
+    $("#year").val("");
+    $("#category").val("");
   });
 }
 
 function updateQuadbike() {
   let dataToSend = {
-    idcostume: parseInt($("#id").val()),
     name: $("#name").val(),
+    description: $("#description").val(),
     brand: $("#brand").val(),
     year: parseInt($("#year").val()),
-    description: $("#description").val(),
-    idcategory: parseInt($("#idCategory").val()),
+    id:parseInt($("#id").val())
   };
   dataToSend = JSON.stringify(dataToSend);
 
   const settings = {
-    url: "https://g389439032223da-bxtdn7v5dsb6tede.adb.us-ashburn-1.oraclecloudapps.com/ords/admin/api/costumes",
+    url: `${API_URL}Quadbike/update`,
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -88,27 +94,38 @@ function updateQuadbike() {
   };
 
   $.ajax(settings).done(function (response) {
-    console.log(response);
+    alert("Quadbike actualizada correctamente");
+    $("#id").val("");
+    $("#name").val("");
+    $("#description").val("");
+    $("#brand").val("");
+    $("#year").val("");
+    $("#category").val("");
+    getQuadbike()
   });
 }
 
-function deleteQuadbike() {
-  let dataToSend = {
-    idcostume: parseInt($("#id").val()),
-  };
-  dataToSend = JSON.stringify(dataToSend);
+function renderQuadbikeToUpdate(id, name, description, brand, year, category) {
+  $("#id").val(id);
+  $("#name").val(name);
+  $("#brand").val(brand);
+  $("#year").val(year);
+  $("#description").val(description);
+  $("#category").val(category);
+}
 
+function deleteQuadbike(id) {
   const settings = {
-    url: "https://g389439032223da-bxtdn7v5dsb6tede.adb.us-ashburn-1.oraclecloudapps.com/ords/admin/api/costumes",
+    url: `${API_URL}Quadbike/${id}`,
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
     },
-    data: dataToSend,
+    data: {},
   };
 
   $.ajax(settings).done(function (response) {
-    console.log(response);
+    alert("Quadbike eliminado correctamente");
   });
 }
 
