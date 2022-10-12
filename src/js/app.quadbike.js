@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8081/api/";
+const API_URL = "http://193.122.145.65:8080/api/";
 
 function getQuadbike() {
   //elemento del DOM->document object model
