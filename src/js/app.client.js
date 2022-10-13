@@ -1,4 +1,5 @@
-const API_URL = "http://localhost:8081/api/";
+//const API_URL = "http://localhost:8081/api/";
+const API_URL = "http://193.122.145.65:8080/api/";
 
 function getAllClients() {
   //elemento del DOM->document object model
@@ -19,22 +20,22 @@ function renderClient(response) {
       row.name,
       row.email,
       row.age,
-      row.idClient
+      row.idClient,
+      row.password
     );
   }
 }
 
-function renderCard(name, email, age, id) {
+function renderCard(name, email, age, id,password) {
   return `
   <div class="card">
       <h1>${name}</h1>
       <p class="price">${age}</p>
-      <input type="text" value />
       <p>
       ${email}
       </p>
-      <p><button onclick="renderClientToUpdate()">Actualizar</button></p>
-      <p><button>Borrar</button></p>
+      <p><button onclick="renderClientToUpdate(${id},'${name}','${email}',${age},'${password}')">Actualizar</button></p>
+      <p><button onclick="deleteClient(${id})" >Borrar</button></p>
     </div>
   `;
 }
@@ -42,7 +43,10 @@ function renderCard(name, email, age, id) {
 function createClient() {
   let dataToSend = {
     name: $("#name").val(), //obtengo el valor que tiene el campo de texto id="name"
-    description: $("#description").val(),
+    email: $("#email").val(),
+    idClient: parseInt($("#id").val()),
+    password: $("#password").val(),
+    age: parseInt($("#age").val()),
   };
   dataToSend = JSON.stringify(dataToSend);
 
@@ -59,15 +63,17 @@ function createClient() {
     alert("Client registrada correctamente");
     $("#name").val(""); //limpio el valor que tenga el campo de texto
     $("#description").val("");
-    getAllCategories();
+    getAllClients();
   });
 }
 
 function updateClient() {
   let dataToSend = {
     name: $("#name").val(),
-    description: $("#description").val(),
-    id: parseInt($("#id").val()),
+    email: $("#email").val(),
+    idClient: parseInt($("#id").val()),
+    password: $("#password").val(),
+    age: parseInt($("#age").val()),
   };
   dataToSend = JSON.stringify(dataToSend);
 
@@ -82,18 +88,21 @@ function updateClient() {
 
   $.ajax(settings).done(function (response) {
     alert("Client actualizada correctamente");
-    $("#id").val("");
-    $("#name").val("");
-    $("#description").val("");
-    getAllCategories();
+    $("#name").val()
+    $("#email").val(),
+    $("#id").val()
+    $("#password").val()
+    $("#age").val()
+    getAllClients();
   });
 }
 
-function renderClientToUpdate(id, name, description) {
+function renderClientToUpdate(id, name, email,age,password) {
   $("#id").val(id); //seteo el valor que tendrá el campo de texto
   $("#name").val(name);
-  $("#description").val(description);
-  //$(".test").val(description);
+  $("#email").val(email);
+  $("#password").val(password);
+  $("#age").val(age);    
 }
 
 function deleteClient(id) {

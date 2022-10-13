@@ -1,3 +1,4 @@
+//const API_URL = "http://localhost:8081/api/";
 const API_URL = "http://193.122.145.65:8080/api/";
 
 function getQuadbike() {
@@ -33,7 +34,7 @@ function renderQuadbike(response) {
             ${row.year}
         </td>
         <td>
-            <button onclick="renderQuadbikeToUpdate(${row.id},'${row.name}','${row.description}','${row.brand}',${row.year},${row.category.id})">Actualizar</button>
+            <button onclick="renderQuadbikeToUpdate(${row.id},'${row.name}','${row.description}','${row.brand}',${row.year},${row.category?.id})">Actualizar</button>
         </td>
         <td>
             <button onclick="deleteQuadbike(${row.id})">Eliminar</button>
